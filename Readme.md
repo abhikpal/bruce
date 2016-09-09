@@ -80,12 +80,27 @@ $
 $ # ...and now we call bruce again to finish the rename
 $ bruce --mask "PYTHON - @lname, @fname.txt" --data-source filelist_2016-09-06_2223.csv
 $ ls
-filelist_2016-09-06_2223.csv  PYTHON - Cleese, John.txt
+changelog.csv  filelist_2016-09-06_2223.csv  PYTHON - Cleese, John.txt
 PYTHON - Idle, Eric.txt    PYTHON - Palin, Michael.txt
 PYTHON - Chapman, Graham.txt  PYTHON - Gilliam, Terry.txt
 PYTHON - Jones, Terry.txt
 $
 $ # We don't need the csv file anymore
 $ rm filelist_2016-09-06_2223.csv
-$ 
+$
+$ # The changes will be logged in changelog.csv
+$ cat changelog.csv
+filename,oldname
+PYTHON - Cleese%44 John.txt,python01.txt
+PYTHON - Idle%44 Eric.txt,python02.txt
+PYTHON - Palin%44 Michael.txt,python03.txt
+PYTHON - Chapman%44 Graham.txt,python04.txt
+PYTHON - Gilliam%44 Terry.txt,python05.txt
+PYTHON - Jones%44 Terry.txt,python06.txt
+$
+$ # The changes can be reverted by doing:
+$ bruce --revert
+$ ls
+changelog.csv  python01.txt  python02.txt  python03.txt  python04.txt  python05.txt
+python06.txt
 ```
