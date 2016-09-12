@@ -112,14 +112,14 @@ if __name__ == '__main__':
             Reverts the previous batch rename from the history in changelog.csv.
         """) 
     parser.add_argument(
-                       '-m', '--mask',
-                       type=str,
-                       default="{filename}",
-                       metavar="MASK",
-                       help="""
-                           Defines the formatting mask to be used while renaming files. This
-                      should be a string with column headers in --data-source as
-              placeholders. A placeholder is just the '@' symbol followed by
+        '-m', '--mask',
+        type=str,
+        default="{filename}",
+        metavar="MASK",
+        help="""
+            Defines the formatting mask to be used while renaming files. This
+            should be a string with column headers in --data-source as
+            placeholders. A placeholder is just the '@' symbol followed by
             the placeholder name.
             Example: "@author - @title (@year).pdf" is a valid renaming
             mask.
@@ -143,12 +143,12 @@ if __name__ == '__main__':
     if args.revert:
         logfile_name='changelog.csv'
         if(os.path.isfile(logfile_name)):
-             batch_rename(
-                  source=args.source,
-                  data='changelog.csv',
-                  mask='@oldname')
+            batch_rename(
+                source=args.source,
+                data='changelog.csv',
+                mask='@oldname')
         else:
-             print('Error: Bruce cannot revert the filename changes you made. Possible causes: 1) You have made no changes. 2) The log file (changelog.csv) is gone. Good luck.')
+            print('Error: Bruce cannot revert the filename changes you made. Possible causes: 1) You have made no changes. 2) The log file (changelog.csv) is gone. Good luck.')
         exit()
     if not args.data_source:
         print("No --data-source specified. Quitting.")
