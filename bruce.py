@@ -6,8 +6,8 @@ from datetime import datetime
 import os
 import re
 
-__version__ = 0.1
-__codename__ = 'baby'
+__version__ = 0.2
+__codename__ = 'toddler'
 
 
 def get_timestamp(tm=datetime.now()):
@@ -39,7 +39,6 @@ def batch_rename(source, data, mask):
     # Get the placeholder names in a tuple
     tuple_regex = re.compile(r'[@]([\w]+)')
     placeholders = tuple(tuple_regex.findall(mask))
-
     # Get the bare mask from the mask+placeholder string.
     # We also swap the placeholders for braces to be used with str.format().
     string_regex = re.compile(r'[@][\w]+')
@@ -60,13 +59,21 @@ def batch_rename(source, data, mask):
     for row in data_reader:
         data_dictionaries.append(dict(zip(data_header, row)))
 
+    filename='changelog.csv'
+    changelog = open(filename, 'w')
+    changelog.write("filename,oldname\n")
+    
     for file_data in data_dictionaries:
         filename = file_data['filename']
-        source_filename = os.path.join(source, filename)
 
+        source_filename = os.path.join(source, filename.replace("%44",","))
         file_info_tuple = tuple(file_data[p] for p in placeholders)
         target_filename = mask_string.format(*file_info_tuple)
-        target_filename = os.path.join(source, target_filename)
+
+        filename_nacomas=filename.replace(",","%44")
+        target_filename_nacomas=target_filename.replace(",","%44")
+        changelog.write('{},{}\n'.format(target_filename_nacomas,filename_nacomas))
+        target_filename = os.path.join(source, target_filename.replace("%44",","))
 
         os.rename(source_filename, target_filename)
 
@@ -99,14 +106,20 @@ if __name__ == '__main__':
             arguments are ignored.
         """)
     parser.add_argument(
-        '-m', '--mask',
-        type=str,
-        default="{filename}",
-        metavar="MASK",
+        '-r', '--revert',
+        action='store_true',
         help="""
-            Defines the formatting mask to be used while renaming files. This
-            should be a string with column headers in --data-source as
-            placeholders. A placeholder is just the '@' symbol followed by
+            Reverts the previous batch rename from the history in changelog.csv.
+        """) 
+    parser.add_argument(
+                       '-m', '--mask',
+                       type=str,
+                       default="{filename}",
+                       metavar="MASK",
+                       help="""
+                           Defines the formatting mask to be used while renaming files. This
+                      should be a string with column headers in --data-source as
+              placeholders. A placeholder is just the '@' symbol followed by
             the placeholder name.
             Example: "@author - @title (@year).pdf" is a valid renaming
             mask.
@@ -126,6 +139,16 @@ if __name__ == '__main__':
         exit()
     if args.generate:
         generate_file_list(args.source)
+        exit()
+    if args.revert:
+        logfile_name='changelog.csv'
+        if(os.path.isfile(logfile_name)):
+             batch_rename(
+                  source=args.source,
+                  data='changelog.csv',
+                  mask='@oldname')
+        else:
+             print('Error: Bruce cannot revert the filename changes you made. Possible causes: 1) You have made no changes. 2) The log file (changelog.csv) is gone. Good luck.')
         exit()
     if not args.data_source:
         print("No --data-source specified. Quitting.")
