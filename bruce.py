@@ -109,7 +109,8 @@ if __name__ == '__main__':
         '-r', '--revert',
         action='store_true',
         help="""
-            Reverts the previous batch rename from the history in changelog.csv.
+            Reverts the previous batch rename from the history in 
+            changelog.csv.
         """) 
     parser.add_argument(
         '-m', '--mask',
@@ -148,7 +149,10 @@ if __name__ == '__main__':
                 data='changelog.csv',
                 mask='@oldname')
         else:
-            print('Error: Bruce cannot revert the filename changes you made. Possible causes: 1) You have made no changes. 2) The log file (changelog.csv) is gone. Good luck.')
+            print("Error: Bruce cannot revert the filename changes you made."
+                  "Possible causes:"
+                  "\t 1) You have made no changes."
+                  "\t 2) The log file (changelog.csv) is gone.")
         exit()
     if not args.data_source:
         print("No --data-source specified. Quitting.")
