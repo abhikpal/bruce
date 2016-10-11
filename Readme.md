@@ -56,6 +56,16 @@ $ ls
 filelist_2016-09-06_2223.csv  python01.txt  python02.txt  python03.txt
 python04.txt  python05.txt  python06.txt
 $
+$ # The output csv file contains a list of the files in the current directory
+$ cat filelist_2016-09-06_2223.csv
+filename
+python01.txt
+python02.txt
+python03.txt
+python04.txt
+python05.txt
+python06.txt
+$
 $ # We edit the csv file as required.
 $ nano filelist_2016-09-06_2223.csv
 $ cat filelist_2016-09-06_2223.csv
